@@ -34,6 +34,9 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3001',
     'http://127.0.0.1:3001',
     'http://0.0.0.0:3001',
+    'http://localhost:81',
+    'http://127.0.0.1:81',
+    'http://0.0.0.0:81',
 ]
 
 CORS_ALLOW_CREDENTIALS = True

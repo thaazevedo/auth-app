@@ -80,6 +80,7 @@ def user_detail(request, id):
 
     *Visible for logged-in users 
     """
+    authentication_classes = ()
     uuid = id
 
     try:
