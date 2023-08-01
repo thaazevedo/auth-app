@@ -53,6 +53,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -93,7 +94,7 @@ DATABASES = {
     }
 }
 
-## User model
+## User modelhttp://127.0.0.1:8000/api/signup/
 AUTH_USER_MODEL = 'api.User'
 
 # Password validation
