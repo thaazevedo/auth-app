@@ -135,9 +135,9 @@ function App() {
 		setEmail('')
 		setPassword('')
 		setIsLogin(true)
-		// setIsSignUp(false)
 		setIsUpdateUser(false)
 		setIsDeleteUser(false)
+        setShowPassword(false)
 	}
 
 
@@ -199,9 +199,10 @@ function App() {
 								)}
 								{/* Renderização condicional do campo de email para habilitar a visualização/edição */}						
 								<div className="white-text row email">
-									
-									{isUpdateUser ? (
-										<TextField
+						
+									<TextField
+										disabled={isUpdateUser ? false : true}
+										defaultValue={email}
 										label="E-mail"
 										id="standard-start-adornment"
 										sx={{ m: 1, width: '40ch' }}
@@ -213,70 +214,45 @@ function App() {
 										}}
 										variant="standard"
 										onChange={(e) => setEmail(e.target.value)}
-										defaultValue={email}
+
 									/>
-									):(
-										<TextField
-										disabled={isUpdateUser ? false : true}
-										sx={{ m: 1, width: '40ch' }} 
-										id={isUpdateUser ? "standard-start-adornment":"filled-disabled"}
-										label="E-mail"
-										variant="filled"
-										defaultValue={email}
-										InputProps={{
-											endAdornment: 
-											<InputAdornment position="end">
-												<EmailIcon sx={{fontSize: 32}} style={{color: "#60495a", marginRight: '7px'}}/>
-											</InputAdornment>,
-										}}
-									/>				
-									)}								
-								</div>
-								{/* Renderização condicional do campo de password para habilitar a visualização/edição */}	
+									</div>
+							
+								{/* Password input com lógica para visualizar/atualizar ou não a senha */}
 								<div className="white-text row" style={{marginTop: '30px'}}>
-								{isUpdateUser ? 
-								(
+
 									<FormControl 
+										disabled={isUpdateUser ? false : true}
 										sx={{ m: 1, width: '40ch' }} 
 										variant="standard">
 										<InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
 										<Input
+											defaultValue={password}
 											required
 											id="standard-adornment-password"
 											className='icon-visibility'
-											type={showPassword ? 'text' : 'password'}
-											defaultValue={password}
+											type={isUpdateUser ? showPassword ? 'text' : 'password' : 'password'}
 											endAdornment={
 												<InputAdornment position="end">
-													<IconButton
-														aria-label="toggle password visibility"
-														onClick={handleClickShowPassword}
-													>
-														{showPassword ? <VisibilityOff sx={{fontSize: 35}} /> : <Visibility sx={{fontSize: 35}} />}
-													</IconButton>
+													{isUpdateUser ? (
+														<IconButton
+															aria-label="toggle password visibility"
+															onClick={handleClickShowPassword}
+														>	
+															{showPassword ? <Visibility sx={{fontSize: 35}} /> : <VisibilityOff sx={{fontSize: 35}} />}
+														</IconButton>
+													):(
+														<IconButton
+															aria-label="toggle password visibility"
+														>	
+															<VisibilityOff sx={{fontSize: 35}} />															
+														</IconButton>
+													)}
 												</InputAdornment>
 											}
 											onChange={(e) => setPassword(e.target.value)}
 										/>
 									</FormControl>
-									) :	(
-									<TextField
-										disabled
-										sx={{ m: 1, width: '40ch' }} 
-										id="filled-disabled"
-										type='password'
-										label="Password"
-										variant="filled"
-										defaultValue={password}
-										InputProps={{
-											endAdornment: 
-											<InputAdornment position="end">
-												<VisibilityOff sx={{fontSize: 32}} style={{color: "#60495a", marginRight: '7px'}}/>
-											</InputAdornment>,
-										}}
-									/>	
-								)}
-								
 								</div>
 								{/* Renderização condicional dos botões para atualizar/apagar uma conta */}	
 								{isUpdateUser ? (
@@ -412,7 +388,7 @@ function App() {
 												aria-label="toggle password visibility"
 												onClick={handleClickShowPassword}
 											>
-												{showPassword ? <VisibilityOff sx={{fontSize: 35}} /> : <Visibility sx={{fontSize: 35}} />}
+												{showPassword ? <Visibility sx={{fontSize: 35}} /> : <VisibilityOff sx={{fontSize: 35}} />}
 											</IconButton>
 										</InputAdornment>
 									}
