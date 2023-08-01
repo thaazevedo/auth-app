@@ -46,7 +46,7 @@ function App() {
 	function submitRegistration(e) {
 
 		e.preventDefault();
-		
+		// Post on signup api
 		client.post(
 			"/api/signup/",
 			{
@@ -54,6 +54,7 @@ function App() {
 				password: password
 			}
 		).then(res => {
+			// Se o status do response for 201, faça o login do user criado
 			if (res.status === 201){
 				submitLogin(e)
 			}
@@ -65,6 +66,7 @@ function App() {
 	// Função para login de um usuário:
 	function submitLogin(e) {
 		e.preventDefault();
+		// Post on login api
     client.post(
       "/api/login/",
       {
@@ -72,6 +74,7 @@ function App() {
         password: password
       }
     ).then(res => {
+			// Se o status do response for 200, set as informações do current user
 			if (res.status === 200) {
 				setCurrentUser(true)
 				setEmail(res.data.data['email'])
@@ -84,10 +87,12 @@ function App() {
 	// Função para logout de um usuário:
 	function submitLogout(e) {
     e.preventDefault();
+		// Post on logout api
     client.post(
       "/api/logout/",
       {withCredentials: true}
     ).then(res => {
+			// Se o status do response for 200, reset as informações da página
 			if (res.status === 200){
 				clearStates()
 			}
@@ -100,6 +105,7 @@ function App() {
 	// Função para atualizar informações de um usuário:
 	function submitUpdate(e) {
 		e.preventDefault();
+		// Put on user api
 		client.put(
 			`/api/user/${idCurrentUser}`,
 			{
@@ -107,6 +113,8 @@ function App() {
 				password: password
 			}
 		).then(res => {
+			// Se o status do response for 200, redirecione o usuário para refazer o login
+			// com as novas credenciais
 			if (res.status === 200) {
 				clearStates()
 			}
@@ -119,9 +127,11 @@ function App() {
 	// Função para apagar um usuário:
 	function submitDelete(e) {
 		e.preventDefault();
+		// Delete on user api
 		client.delete(
 			`/api/user/${idCurrentUser}`,
 		).then(res => {
+			// Se o status do response for 204, reset as informações da página
 			if (res.status === 204) {
 				clearStates()
 			}
@@ -137,7 +147,7 @@ function App() {
 		setIsLogin(true)
 		setIsUpdateUser(false)
 		setIsDeleteUser(false)
-        setShowPassword(false)
+		setShowPassword(false)
 	}
 
 
@@ -153,6 +163,7 @@ function App() {
 							<Typography variant="h6" component="div" sx={{ flexGrow: 1 }} style={{fontWeight: 'bolder', fontSize: '20px'}}>
 								Bem vindo!
 							</Typography>
+							{/* Ícone logout */}
 							<IconButton
 								size="large"
 								edge="start"
@@ -199,7 +210,6 @@ function App() {
 								)}
 								{/* Renderização condicional do campo de email para habilitar a visualização/edição */}						
 								<div className="white-text row email">
-						
 									<TextField
 										disabled={isUpdateUser ? false : true}
 										defaultValue={email}
@@ -220,7 +230,6 @@ function App() {
 							
 								{/* Password input com lógica para visualizar/atualizar ou não a senha */}
 								<div className="white-text row" style={{marginTop: '30px'}}>
-
 									<FormControl 
 										disabled={isUpdateUser ? false : true}
 										sx={{ m: 1, width: '40ch' }} 
@@ -254,6 +263,7 @@ function App() {
 										/>
 									</FormControl>
 								</div>
+
 								{/* Renderização condicional dos botões para atualizar/apagar uma conta */}	
 								{isUpdateUser ? (
 									<div className='edit-user-infos'>
@@ -351,51 +361,49 @@ function App() {
 									</Typography>
 								)}
 
-							{/* Email input */}
-							<div className="white-text row email">
-						
-							<TextField
-								label="E-mail"
-								id="standard-start-adornment"
-								sx={{ m: 1, width: '40ch' }}
-								InputProps={{
-									endAdornment: 
-									<InputAdornment position="end">
-										<EmailIcon sx={{fontSize: 32}} style={{color: "#60495a", marginRight: '7px'}}/>
-									</InputAdornment>,
-								}}
-								variant="standard"
-								onChange={(e) => setEmail(e.target.value)}
-							/>
-															
+							{/* Email input com ícone de email*/}
+							<div className="white-text row email">						
+								<TextField
+									label="E-mail"
+									id="standard-start-adornment"
+									sx={{ m: 1, width: '40ch' }}
+									InputProps={{
+										endAdornment: 
+										<InputAdornment position="end">
+											<EmailIcon sx={{fontSize: 32}} style={{color: "#60495a", marginRight: '7px'}}/>
+										</InputAdornment>,
+									}}
+									variant="standard"
+									onChange={(e) => setEmail(e.target.value)}
+								/>														
 							</div>
 							
 							{/* Password input com lógica para visualizar ou não a senha*/}
 							<div className="white-text row" style={{marginTop: '30px'}}>
-
-							<FormControl 
-								sx={{ m: 1, width: '40ch' }} 
-								variant="standard">
-								<InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
-								<Input
-									required
-									id="standard-adornment-password"
-									className='icon-visibility'
-									type={showPassword ? 'text' : 'password'}
-									endAdornment={
-										<InputAdornment position="end">
-											<IconButton
-												aria-label="toggle password visibility"
-												onClick={handleClickShowPassword}
-											>
-												{showPassword ? <Visibility sx={{fontSize: 35}} /> : <VisibilityOff sx={{fontSize: 35}} />}
-											</IconButton>
-										</InputAdornment>
-									}
-									onChange={(e) => setPassword(e.target.value)}
-								/>
-							</FormControl>
+								<FormControl 
+									sx={{ m: 1, width: '40ch' }} 
+									variant="standard">
+									<InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+									<Input
+										required
+										id="standard-adornment-password"
+										className='icon-visibility'
+										type={showPassword ? 'text' : 'password'}
+										endAdornment={
+											<InputAdornment position="end">
+												<IconButton
+													aria-label="toggle password visibility"
+													onClick={handleClickShowPassword}
+												>
+													{showPassword ? <Visibility sx={{fontSize: 35}} /> : <VisibilityOff sx={{fontSize: 35}} />}
+												</IconButton>
+											</InputAdornment>
+										}
+										onChange={(e) => setPassword(e.target.value)}
+									/>
+								</FormControl>
 							</div>
+
 							{/* Renderiza o botão de logar/registrar */}
 							<input 
 								type="submit" 
@@ -404,6 +412,7 @@ function App() {
 								onClick={(e) => isLogin ? (submitLogin(e)):(submitRegistration(e))}
 								// onclick="check_inputs()" 
 							/>
+
 							{/* Renderização condicional do texto para alternar entre login/signup */}
 							{isLogin ? (
 								<span style={{color: "#60495a", marginTop: '10px', fontSize: '12px'}}>
@@ -411,7 +420,6 @@ function App() {
 										className='btn-signup' 
 										onClick={() => {
 											setIsLogin(false)
-											// setIsSignUp(true)
 											}}> 
 												Registre-se!
 									</strong>
@@ -422,7 +430,6 @@ function App() {
 									className='btn-login' 
 									onClick={() => {
 										setIsLogin(true)
-										// setIsSignUp(false)
 										}}> 
 										  Entre!
 								</strong>
