@@ -12,15 +12,23 @@
 Authapp é executado utilizando Docker Compose. Para visualizar as configurações acesse o arquivo docker-compose.yaml.
 
 ```sh
-# clone o repositório
+# clone o repositório:
 git clone https://github.com/thaazevedo/auth-app.git
 
-# entre no diretório do repositório
-cd auth-app
+# entre no diretório do repositório:
+cd auth-app/
 
 # para iniciar o projeto:
 docker-compose up --build
+```
 
+Assim, o projeto já estará em execução:
+
+ a. <strong>Frotend:</strong> http://0.0.0.0:81
+ 
+ b. <strong>Backend:</strong> http://0.0.0.0:8000/api/
+
+```
 # para finalizar os containers do projeto:
 docker-compose down
 ```
