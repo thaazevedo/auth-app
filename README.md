@@ -9,7 +9,7 @@
 
 ## Instalação
 
-Authapp é executando utilizando Docker Compose. Para visualizar as configurações acesse o arquivo docker-compose.yaml
+Authapp é executado utilizando Docker Compose. Para visualizar as configurações acesse o arquivo docker-compose.yaml.
 
 ```sh
 # clone o repositório
@@ -27,12 +27,12 @@ docker-compose down
 
 ## Usage Auth App
 
-- Para acessar a aplicação, vá para a url http://0.0.0.0:81, onde verá o aplicação React em Execução. Nessa página o usuário poderá entrar no sistema, ou caso não possua conta, basta se registrar! 
+- Para acessar a aplicação, vá para a url http://0.0.0.0:81, onde verá o aplicação React em Execução. Nessa página o usuário poderá entrar no sistema, ou, caso não possua conta, basta se registrar! 
 <p float="center">
  <img width="300px" src="https://github.com/thaazevedo/auth-app/assets/76017955/f68f330b-d173-44cc-bb26-31efbe1c0a82">
 </p>
 
-- Assim, o usuário será redirecionado ao dasboard de visualizações das informações de sua conta.
+- Assim, o usuário será redirecionado ao dashboard de visualizações das informações de sua conta.
 
 - Nesta página o usuário pode:
 
@@ -40,11 +40,11 @@ docker-compose down
  <img width="300px" src="https://github.com/thaazevedo/auth-app/assets/76017955/3e069743-0189-45e6-9976-25989ab5ac46">
 </p>
 
-  a. Sair do sistema: Ao clickar no ícone no canto superior direito da tela;
+  a. <strong>Sair do sistema:</strong> Ao clicar no ícone no canto superior direito da tela;
   
-  b. Atualizer e validar a edição das informações de sua conta: Ao clickar em Editar e após isso, em Atualizar;
+  b. <strong>Atualizar e validar a edição das informações de sua conta: </strong> Ao clicar em Editar e após isso, em Atualizar;
   
-  c. Apagar a conta: Ao clicker em Apagar e confirmar a exclusão da conta.
+  c. <strong>Apagar a conta: </strong> Ao clicar em Apagar e confirmar a exclusão da conta.
 
 
 ## API Validators
