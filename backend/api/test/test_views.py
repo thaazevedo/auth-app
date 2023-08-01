@@ -1,9 +1,6 @@
 from django.urls import reverse
 from rest_framework import status
 from .test_setup import TestSetUp
-from ..models import User
-from ..serializers import UserSerializer, SignUpSerializer, LoginSerializer, UserChangeSerializer
-
 
 class TestViews(TestSetUp):
     """
