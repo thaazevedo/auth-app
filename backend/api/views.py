@@ -28,12 +28,11 @@ class SignUp(APIView):
 
         if serializer.is_valid(raise_exception=True):
             user = serializer.create(validated_data)
-            print(user.id)
-                        
+                                    
             if user:
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class Login(APIView):
@@ -59,8 +58,7 @@ class Login(APIView):
             user = serializer.check(data)
             login(request, user)
 
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
+            return Response({'data': serializer.data, 'id': user.id}, status=status.HTTP_200_OK)
 
 class Logout(APIView):
     """
@@ -83,7 +81,7 @@ def user_detail(request, id):
     *Visible for logged-in users 
     """
     uuid = id
-    print(id, uuid)
+
     try:
         user = User.objects.get(id=uuid)
     except User.DoesNotExist:
@@ -99,41 +97,42 @@ def user_detail(request, id):
 
     elif request.method == 'PUT':
         """
-        Update onfos of an user.
+        Update infos of an user.
         """
-        print('PUT')
+
         serializer = UserChangeSerializer(data=request.data)
-        print(serializer)
+
         if serializer.is_valid():
-            print("is valid")
-            password = user.password 
+            
             new_password = serializer.data['password']
 
+            old_email = user.email
             new_email = serializer.data['email']
-            print(f"old: {password}, new: {new_password}")
+
             is_same_as_old = user.check_password(new_password)
             
-            if is_same_as_old:
-                return Response({"password": ["It should be different from your last password."]},
-                                status=status.HTTP_400_BAD_REQUEST)
+            if not is_same_as_old:
+                """
+                Update password, if new differente from old
+                """
+                user.set_password(new_password)
+                
+            if new_email != old_email:
+                """
+                Update email, if new differente from old
+                """
+                user.email = new_email
             
-            user.email = new_email
-            user.set_password(new_password)
             user.save()
-            
-            print("new user")
-            print(user.email)
-            print(user.password)
+          
             return Response(serializer.data, status=status.HTTP_200_OK)
         
-        print("serializer not valid")
-        return Response(serializer.data, status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.error, status=status.HTTP_404_NOT_FOUND)
 
     elif request.method == 'DELETE':
         """
         Delete an user
         """
-        print("delete")
+
         user.delete()
-        print(user)
         return Response(status=status.HTTP_204_NO_CONTENT)
