@@ -54,11 +54,57 @@ docker-compose down
   
   c. <strong>Apagar a conta: </strong> Ao clicar em Apagar e confirmar a exclusão da conta.
 
+## Usage API
 
+- Para acessar a API, vá para a url http://0.0.0.0:8000/api/)
+
+a. <strong>Registrar um usuário</strong>
+
+ - POST http://0.0.0.0:8000/api/signup/
+```json
+// request body
+{
+    "email": "email@email",
+    "password": "password",
+}
+```
+
+b. <strong>Logar um usuário</strong>
+
+ - POST http://0.0.0.0:8000/api/login/
+```json
+// request body
+{
+    "email": "email@email",
+    "password": "password",
+}
+```
+c. <strong>Pegar informações de um usuário</strong>
+
+ - GET http://0.0.0.0:8000/api/user/[uuid]
+
+d. <strong>Logout de um usuário</strong>
+
+ - POST http://0.0.0.0:8000/api/logout/
+
+e. <strong>Atualizer informações de um usuário</strong>
+
+ - PUT http://0.0.0.0:8000/api/user/[uuid]
+
+f. <strong>Apagar um usuário</strong>
+
+ - DELETE http://0.0.0.0:8000/api/user/[uuid]
+ 
 ## API Validators
 
-* E-mail: não pode ser um campo inválido ou ser repetido em mais de uma conta;
-* Password: não pode ser um campo inválido.
+* E-mail: não pode ser um campo inválido e ser repetido em mais de uma conta;
+* Password: não pode ser um campo inválido e ter menos de 6 caracteres.
+
+
+ ## Inputs Validators
+
+* E-mail: não pode ser um campo vazio e não possui caracteres não comum ao e-mail;
+* Password: não pode ser um campo inválido e ter menos de 6 caracteres.
 
 ## Run tests
 
