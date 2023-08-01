@@ -41,24 +41,68 @@ function App() {
 	// Mostra ou não a senha ao cadastrar, logar ou atualizar conta:
 	const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-		
+	
+	// Registra se possui erro no email
+	const [errorEmail, setErrorEmail] = useState(null);
+	// Registra se possui erro na senha
+	const [errorPassword, setErrorPassword] = useState(null);
+
+	// Verifica valores do input de email:
+	function isValidEmail(email) {
+		console.log(/\S+@\S+\.\S+/.test(email))
+    return /\S+@\S+\.\S+/.test(email);
+  }
+
+	// Verifica valores do input de password:
+	function isValidPassword(password) {
+		console.log(password)
+		if (password.length >= 6) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	// Verifica valores dos inputs:
+	function check_inputs(email, password) {
+		let cont_error = 0;
+
+		if (!isValidEmail(email)) {
+			cont_error++;
+			setErrorEmail('Email inválido!');
+    } else{setErrorEmail('')}
+
+		if (!isValidPassword(password)) {
+			cont_error++;
+			setErrorPassword('Password inválida!')
+		} else {setErrorPassword('')}
+
+		return cont_error;
+	}
+
+
 	// Função para cadastro de um usuário:
 	function submitRegistration(e) {
-
 		e.preventDefault();
-		// Post on signup api
-		client.post(
-			"/api/signup/",
-			{
-				email: email,
-				password: password
-			}
-		).then(res => {
-			// Se o status do response for 201, faça o login do user criado
-			if (res.status === 201){
-				submitLogin(e)
-			}
-		});
+
+		// Verifica os inputs
+		let errors = check_inputs(email, password);
+		
+		if (errors === 0){
+			// Post on signup api
+			client.post(
+				"/api/signup/",
+				{
+					email: email,
+					password: password
+				}
+			).then(res => {
+				// Se o status do response for 201, faça o login do user criado
+				if (res.status === 201){
+					submitLogin(e)
+				}
+			});	
+		}
 	}
 	
 	// Auxilia renderizações condicionais de login de um usuário:
@@ -66,22 +110,33 @@ function App() {
 	// Função para login de um usuário:
 	function submitLogin(e) {
 		e.preventDefault();
-		// Post on login api
-    client.post(
-      "/api/login/",
-      {
-        email: email,
-        password: password
-      }
-    ).then(res => {
-			// Se o status do response for 200, set as informações do current user
-			if (res.status === 200) {
-				setCurrentUser(true)
-				setEmail(res.data.data['email'])
-				setPassword(res.data.data['password'])
-				setIdCurrentUser(res.data.id)
+
+		// Verifica os inputs
+		let errors = check_inputs(email, password)
+
+		if (errors === 0){
+			try {
+				// Post on login api
+				client.post(
+					"/api/login/",
+					{
+						email: email,
+						password: password
+					}
+				).then(res => {
+					// Se o status do response for 200, set as informações do current user
+					if (res.status === 200) {
+						setCurrentUser(true)
+						setEmail(res.data.data['email'])
+						setPassword(res.data.data['password'])
+						setIdCurrentUser(res.data.id)
+					} 
+				}
+				)
+			} catch (error) {
+				alert("Ocorreu algum erro, verifique e tente novamente!!")
 			}
-    });
+		} 
   }
 
 	// Função para logout de um usuário:
@@ -95,7 +150,7 @@ function App() {
 			// Se o status do response for 200, reset as informações da página
 			if (res.status === 200){
 				clearStates()
-			}
+			}			
     });
 	}
 
@@ -105,20 +160,26 @@ function App() {
 	// Função para atualizar informações de um usuário:
 	function submitUpdate(e) {
 		e.preventDefault();
-		// Put on user api
-		client.put(
-			`/api/user/${idCurrentUser}`,
-			{
-				email: email,
-				password: password
-			}
-		).then(res => {
-			// Se o status do response for 200, redirecione o usuário para refazer o login
-			// com as novas credenciais
-			if (res.status === 200) {
-				clearStates()
-			}
-		});
+
+		// Verifica os inputs
+		let errors = check_inputs(email, password)
+		
+		if (errors === 0){	
+			// Put on user api
+			client.put(
+				`/api/user/${idCurrentUser}`,
+				{
+					email: email,
+					password: password
+				}
+			).then(res => {
+				// Se o status do response for 200, redirecione o usuário para refazer o login
+				// com as novas credenciais
+				if (res.status === 200) {
+					clearStates()
+				}
+			});
+		}
 	}
 
 	// Auxilia renderizações condicionais de exclusão de um usuário:
@@ -226,6 +287,7 @@ function App() {
 										onChange={(e) => setEmail(e.target.value)}
 
 									/>
+									{errorEmail && <p className='error'>{errorEmail}</p>}
 									</div>
 							
 								{/* Password input com lógica para visualizar/atualizar ou não a senha */}
@@ -262,6 +324,7 @@ function App() {
 											onChange={(e) => setPassword(e.target.value)}
 										/>
 									</FormControl>
+									{errorPassword && <p className='error'>{errorPassword}</p>}
 								</div>
 
 								{/* Renderização condicional dos botões para atualizar/apagar uma conta */}	
@@ -376,6 +439,7 @@ function App() {
 									variant="standard"
 									onChange={(e) => setEmail(e.target.value)}
 								/>														
+								{errorEmail && <p className='error'>{errorEmail}</p>}														
 							</div>
 							
 							{/* Password input com lógica para visualizar ou não a senha*/}
@@ -402,6 +466,7 @@ function App() {
 										onChange={(e) => setPassword(e.target.value)}
 									/>
 								</FormControl>
+								{errorPassword && <p className='error'>{errorPassword}</p>}
 							</div>
 
 							{/* Renderiza o botão de logar/registrar */}
